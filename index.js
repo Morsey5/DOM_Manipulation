@@ -75,19 +75,74 @@ const menuLinks = [
 
 
 
-    topMenuEl.addEventListener("click", function(event) {
+    // topMenuEl.addEventListener("click", function(event) {
     
-        event.preventDefault();
+    //     event.preventDefault();
       
-        if (!event.target.matches("a")) {
-          return;
-        }
+    //     if (!event.target.matches("a")) {
+    //       return;
+    //     }
 
-        topMenuLinks.forEach(function(link) {
-          link.classList.remove("active");
-        });
+    //     topMenuLinks.forEach(function(link) {
+    //       link.classList.remove("active");
+    //     });
       
-        event.target.classList.toggle("active");
+    //     event.target.classList.toggle("active");
       
-        console.log(event.target.textContent);
+    //     console.log(event.target.textContent);
+    //   });
+
+
+    topMenuEl.addEventListener("click", function(event) {
+      event.preventDefault();
+      if (!event.target.matches("a")) {
+        return;
+      }
+    
+      const clickedLink = event.target;
+      const linkObject = findLinkObject(menuLinks, clickedLink.textContent);
+    
+      if (!clickedLink.classList.contains("active")) {
+        if (linkObject && linkObject.subLinks) {
+          subMenuEl.style.top = "100%";
+          buildSubmenu(linkObject.subLinks);
+        } else {
+          subMenuEl.style.top = "0";
+        }
+      } else {
+        subMenuEl.style.top = "0";
+      }
+    
+      clickedLink.classList.toggle("active");
+    });
+
+    subMenuEl.addEventListener("click", function(event) {
+      event.preventDefault();
+      if (!event.target.matches("a")) {
+        return;
+      }
+    
+      subMenuEl.style.top = "0";
+    
+      topMenuLinks.forEach(function(link) {
+        link.classList.remove("active");
       });
+    
+      mainEl.innerHTML = `<h1>${event.target.textContent}</h1>`;
+    });
+
+    function findLinkObject(linksArray, linkText) {
+      return linksArray.find(function(link) {
+        return link.text === linkText;
+      });
+    }
+
+    function buildSubmenu(subLinks) {
+      subMenuEl.innerHTML = '';
+      subLinks.forEach(function(link) {
+        var linkElement = document.createElement('a');
+        linkElement.setAttribute('href', link.href);
+        linkElement.textContent = link.text;
+        subMenuEl.appendChild(linkElement);
+      });
+    }
