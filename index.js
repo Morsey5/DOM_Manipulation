@@ -116,6 +116,7 @@ const menuLinks = [
       clickedLink.classList.toggle("active");
     });
 
+    //Submenu appears, no links
     subMenuEl.addEventListener("click", function(event) {
       event.preventDefault();
       if (!event.target.matches("a")) {
@@ -136,7 +137,7 @@ const menuLinks = [
         return link.text === linkText;
       });
     }
-
+    // the sub links will appear, finally!
     function buildSubmenu(subLinks) {
       subMenuEl.innerHTML = '';
       subLinks.forEach(function(link) {
